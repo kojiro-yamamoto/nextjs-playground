@@ -518,8 +518,8 @@ React の中心が「状態」だったのに対し、Next.js の中心は **「
 | Step | テーマ | 学ぶ中心概念 |
 |---|---|---|
 | 0 | 全体像とプロジェクト構成 | Next.js の役割、レンダリング方式、App Router |
-| 1 | ページとレイアウトを作る | ファイルベースルーティング、`page.tsx` / `layout.tsx`、CSS、`next/font` |
-| 2 | 記事の一覧と詳細を表示する | Server Component の `async` データ取得、動的ルート `[slug]`、`params`、`notFound()`、`<Link>`、`generateMetadata` |
+| 1 | ページとレイアウトを作る | ファイルベースルーティング、`page.tsx` / `layout.tsx`、CSS Modules、`next/font`、`<Link>` |
+| 2 | 記事の一覧と詳細を表示する | Server Component の `async` データ取得、動的ルート `[slug]`、`params`、`notFound()`、`generateMetadata` |
 | 3 | Client Component を境界として足す | `"use client"`、境界の設計、`loading.tsx` / `error.tsx`、ストリーミング |
 | 4 | 記事を投稿する | Server Actions、`<form action>`、`revalidatePath`、JSON ファイルへの永続化 |
 | 5 | 検索とレンダリング・キャッシュ | `searchParams`、静的 / 動的レンダリング、再検証、`next build` の読み方 |

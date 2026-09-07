@@ -1,0 +1,21 @@
+.main {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 48px 20px 0;
+}
+
+.dl {
+  margin: 24px 0 0;
+  display: grid;
+  grid-template-columns: 8em 1fr;
+  gap: 8px 16px;
+  font-size: 15px;
+}
+
+.dl dt {
+  color: var(--muted);
+}
+
+.dl dd {
+  margin: 0;
+}

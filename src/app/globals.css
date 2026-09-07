@@ -1,9 +1,17 @@
+/*
+ * 本当にサイト全体へ効かせたいものだけをここに置く。
+ * 個別の見た目は各コンポーネントの *.module.css（CSS Modules）に書く。
+ */
+
 :root {
   --bg: #fbfbfa;
   --fg: #1c1c1a;
   --muted: #6b6b66;
   --border: #e3e3df;
   --accent: #2f6f4f;
+  --accent-weak: #eef4f0;
+  --radius: 8px;
+  --content-width: 720px;
 }
 
 * {
@@ -19,31 +27,18 @@ body {
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: system-ui, -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-  line-height: 1.7;
+  line-height: 1.8;
+  /* font-family は layout.tsx の next/font が付けるクラスから継承される */
 }
 
 a {
   color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
-.container {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 32px 20px 64px;
-}
-
-.site-header {
-  border-bottom: 1px solid var(--border);
-}
-
-.site-title {
-  margin: 0;
-  font-size: 20px;
-}
-
-.site-footer {
-  border-top: 1px solid var(--border);
-  color: var(--muted);
-  font-size: 13px;
+h1,
+h2,
+h3 {
+  line-height: 1.4;
 }

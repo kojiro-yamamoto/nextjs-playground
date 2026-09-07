@@ -1,0 +1,30 @@
+.header {
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+
+.inner {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+}
+
+.title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.titleLink {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+}
