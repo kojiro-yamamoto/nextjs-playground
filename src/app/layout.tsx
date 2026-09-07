@@ -12,7 +12,13 @@ const notoSansJP = Noto_Sans_JP({
 })
 
 export const metadata: Metadata = {
-  title: 'Next.js Playground',
+  // template は、子のページが title を出したときの型。
+  // 記事ページが 'layout は入れ子になる' を返すと
+  // 'layout は入れ子になる | Next.js Playground' になる。
+  title: {
+    default: 'Next.js Playground',
+    template: '%s | Next.js Playground',
+  },
   description: 'Next.js を Step ごとに学ぶための、ブログアプリの学習用リポジトリ',
 }
 

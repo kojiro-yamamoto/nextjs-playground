@@ -142,3 +142,59 @@ Noto Sans JPを取得
   box-sizing: border-box;
 }は「すべての要素に border-box を適用する」ということです。
 =========================
+export async function generateMetadata({
+  params,
+}: PageProps<'/blog/[slug]'>)
+
+Next.jsが generateMetadata に渡すものには、主に params と searchParams があります。
+
+今回使っているのは params だけです。
+
+{
+  params
+}
+
+そして、params の中身はフォルダ名によって決まります。
+
+今回のフォルダが、
+
+app/
+└── blog/
+    └── [slug]/
+        └── page.tsx
+
+だから、
+
+[slug]
+   ↓
+params の中に slug が作られる
+
+というだけです。
+
+たとえば、
+
+app/users/[id]/page.tsx
+
+なら、
+
+params = {
+  id: '123'
+}
+
+です。
+
+app/products/[productId]/page.tsx
+
+なら、
+
+params = {
+  productId: 'abc'
+}
+
+です。
+
+なのでルールは非常にシンプルで、
+
+[〇〇] というフォルダを作ると、その 〇〇 が params のプロパティになる。
+
+です。

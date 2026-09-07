@@ -7,7 +7,7 @@ export default function BlogLayout({ children }: LayoutProps<'/blog'>) {
     <div className={styles.wrapper}>
       <h1 className={styles.heading}>ブログ</h1>
       <p className={styles.note}>
-        この見出しと帯は <code>app/blog/layout.tsx</code> のもの。/blog 配下のどのページでも表示される。
+        この見出しと帯は <code>app/blog/layout.tsx</code> のもの。一覧でも記事詳細でも表示される。
       </p>
       {children}
     </div>

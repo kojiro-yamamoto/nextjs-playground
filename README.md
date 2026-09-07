@@ -29,7 +29,7 @@ npm run dev   # 開発サーバー起動 → http://localhost:3000
 |---|---------|---------|--------|------|
 | 0 | 全体像とプロジェクト構成 | Next.js が解決する問題、レンダリング方式、App Router、Server Components | [00-overview.md](./documents/00-overview.md) | ✅ |
 | 1 | ページとレイアウトを作る | ファイルベースルーティング、`page.tsx` / `layout.tsx`、CSS Modules、`next/font`、`<Link>` | [01-routing-and-layout.md](./documents/01-routing-and-layout.md) | ✅ |
-| 2 | 記事の一覧と詳細を表示する | Server Component の `async` データ取得、動的ルート `[slug]`、`params`、`notFound()`、`generateMetadata` | – | ⬜ |
+| 2 | 記事の一覧と詳細を表示する | Server Component の `async` データ取得、動的ルート `[slug]`、`params`、`notFound()`、`generateMetadata`、`generateStaticParams` | [02-server-components-and-dynamic-routes.md](./documents/02-server-components-and-dynamic-routes.md) | ✅ |
 | 3 | Client Component を境界として足す | `"use client"`、サーバー / クライアント境界の設計、`loading.tsx` / `error.tsx`、ストリーミング | – | ⬜ |
 | 4 | 記事を投稿する | Server Actions、`<form action>`、`useActionState`、`revalidatePath`、JSON ファイルへの永続化 | – | ⬜ |
 | 5 | 検索とレンダリング・キャッシュ | `searchParams`、URL を状態として使う、静的 / 動的レンダリング、再検証、`next build` の読み方 | – | ⬜ |
@@ -43,7 +43,7 @@ git switch step2   # Step 2 完了時点の状態
 npm run dev
 ```
 
-`main` は常に最新（Step1 まで完了した状態）です。
+`main` は常に最新（Step2 まで完了した状態）です。
 
 ### この先の発展トピック（本編では扱わない）
 

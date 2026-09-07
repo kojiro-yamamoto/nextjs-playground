@@ -1,0 +1,24 @@
+.article {
+  padding-bottom: 24px;
+}
+
+.date {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.title {
+  margin: 4px 0 24px;
+  font-size: 24px;
+}
+
+.body p {
+  margin: 0 0 1.2em;
+}
+
+.back {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 14px;
+}

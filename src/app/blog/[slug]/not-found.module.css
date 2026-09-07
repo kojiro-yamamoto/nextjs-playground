@@ -1,0 +1,7 @@
+.wrapper {
+  padding-bottom: 24px;
+}
+
+.lead {
+  color: var(--muted);
+}
