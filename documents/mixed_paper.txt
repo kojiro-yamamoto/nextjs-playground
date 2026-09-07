@@ -1,0 +1,74 @@
+next dev を実行すると、Next.js 16ではこんなファイルが作られることがあります。
+
+プロジェクト/
+├── AGENTS.md     ← AI全般向けの説明書
+├── CLAUDE.md     ← Claude Code向け
+├── app/
+├── package.json
+└── ...
+
+目的は、
+
+Next.js
+  ↓
+「AIが古いNext.jsの知識でコードを書くと困る」
+  ↓
+AGENTS.mdを自動生成
+  ↓
+AIに
+「このプロジェクトのNext.jsについては
+ node_modules内の最新ドキュメントを確認してね」
+と指示
+
+というものです。
+
+AGENTS.md とは
+
+AGENTS.md は、AIコーディングエージェント向けの指示を書くファイルです。
+
+人間向けの README.md と比較すると分かりやすいです。
+
+README.md
+→ 人間に「このプロジェクトはこういうものです」
+AGENTS.md
+→ AIに「このプロジェクトではこうやって作業してください」
+
+たとえば、
+
+# This is NOT the Next.js you know
+コードを書く前に
+node_modules/next/dist/docs/
+のドキュメントを確認してください。
+
+のような指示が入っています。
+
+Claude CodeやCursorなどのAIがこれを読めば、
+
+「自分の学習済み知識だけでNext.jsのコードを書くのではなく、このプロジェクトにインストールされているNext.jsのドキュメントを確認しよう」
+
+となるわけです。
+
+じゃあ CLAUDE.md は？
+
+これは Claude Code専用の指示ファイルです。
+
+ただし中身が、
+
+@AGENTS.md
+
+だけなら、
+
+「詳しい指示は AGENTS.md を読んでね」
+
+という転送役になっています。
+
+Claude Code
+    ↓
+CLAUDE.md を読む
+    ↓
+@AGENTS.md
+    ↓
+AGENTS.md を読む
+    ↓
+Next.jsの指示を理解
+=========================
