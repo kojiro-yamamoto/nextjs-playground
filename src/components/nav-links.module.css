@@ -1,0 +1,22 @@
+.nav {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* 現在開いているページのリンク */
+.active {
+  color: var(--fg);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: default;
+}

@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 import { getPost, getPosts } from '@/lib/posts'
 import styles from './page.module.css'
+import RelatedPosts, { RelatedPostsSkeleton } from './related-posts'
+import ShareButton from './share-button'
 
 // どの slug のページを作れるかを Next.js に教える。
 // これがあるとビルド時に全記事の HTML が作り置きされる（静的レンダリング）。
@@ -50,9 +53,22 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
         ))}
       </div>
 
-      <Link href="/blog" className={styles.back}>
-        ← 記事一覧へ戻る
-      </Link>
+      <div className={styles.actions}>
+        {/* Server Component の中に Client Component を置く。これが基本形 */}
+        <ShareButton />
+        <Link href="/blog" className={styles.back}>
+          ← 記事一覧へ戻る
+        </Link>
+      </div>
+
+      {/*
+        RelatedPosts は 1秒かかる。Suspense で包むと、
+        ここより上（本文）を待たせずに先に送り、
+        準備できた時点でこの部分だけを差し込める（ストリーミング）。
+      */}
+      <Suspense fallback={<RelatedPostsSkeleton />}>
+        <RelatedPosts slug={post.slug} />
+      </Suspense>
     </article>
   )
 }

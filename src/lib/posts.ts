@@ -3,6 +3,13 @@
 // 先に決めておく。Step 4 で JSON ファイル、Step 6 で SQLite に差し替えても、
 // ページ側のコードは書き換えなくて済む。
 
+// --- Step 3 で追加: 学習用の遅延 -------------------------------------------
+// 定数配列は一瞬で返ってしまい、loading.tsx やストリーミングが観察できない。
+// そこで DB アクセス相当の待ち時間をわざと入れている。
+// Step 6 で本物の SQLite に差し替えるときに、この 3行は削除する。
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+// ---------------------------------------------------------------------------
+
 export type Post = {
   slug: string // URL に使う識別子。/blog/<slug> になる
   title: string
@@ -46,10 +53,21 @@ Next.js は React を内側に抱えたまま、そこへ「サーバー」と�
 
 /** 記事を新しい順に全件返す */
 export async function getPosts(): Promise<Post[]> {
+  await sleep(300)
   return [...posts].sort((a, b) => b.date.localeCompare(a.date))
 }
 
 /** slug に一致する記事を返す。見つからなければ undefined */
 export async function getPost(slug: string): Promise<Post | undefined> {
+  await sleep(300)
   return posts.find((post) => post.slug === slug)
+}
+
+/**
+ * 指定した記事以外を返す（関連記事）。
+ * 本文より重い処理の例として、あえて他より遅くしている。
+ */
+export async function getRelatedPosts(slug: string): Promise<Post[]> {
+  await sleep(1000)
+  return posts.filter((post) => post.slug !== slug)
 }

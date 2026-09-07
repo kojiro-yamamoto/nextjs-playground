@@ -1,0 +1,32 @@
+.wrapper {
+  padding: 24px 0;
+}
+
+.heading {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.lead {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.digest {
+  display: block;
+  margin-top: 4px;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.button {
+  margin-top: 8px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+}

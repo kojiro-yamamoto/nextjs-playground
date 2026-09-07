@@ -22,9 +22,3 @@
   color: var(--fg);
   text-decoration: none;
 }
-
-.nav {
-  display: flex;
-  gap: 16px;
-  font-size: 14px;
-}

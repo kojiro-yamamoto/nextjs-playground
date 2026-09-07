@@ -1,0 +1,43 @@
+.section {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.heading {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.list {
+  margin: 0;
+  padding-left: 1.2em;
+  font-size: 14px;
+}
+
+.item {
+  margin-bottom: 4px;
+}
+
+.skeletonLine {
+  height: 14px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background: var(--border);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.skeletonLine:nth-child(2) {
+  width: 70%;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}

@@ -1,0 +1,39 @@
+.skeleton {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.skeleton:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.line {
+  height: 13px;
+  border-radius: 4px;
+  background: var(--border);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.date {
+  width: 6em;
+}
+
+.title {
+  width: 60%;
+  height: 18px;
+  margin: 10px 0;
+}
+
+.excerpt {
+  width: 90%;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
