@@ -1,14 +1,14 @@
 // 記事のデータ層。
-// Step 2 ではまだ「ただの定数配列」だが、呼び出し側から見た形（async 関数）を
-// 先に決めておく。Step 4 で JSON ファイル、Step 6 で SQLite に差し替えても、
-// ページ側のコードは書き換えなくて済む。
+//
+// Step 2: 定数配列
+// Step 4: JSON ファイル（← いま）
+// Step 6: SQLite
+//
+// 中身は差し替わっているが、公開している関数の「形」は Step 2 のまま。
+// だからページ側のコードは一度も書き換えていない。
 
-// --- Step 3 で追加: 学習用の遅延 -------------------------------------------
-// 定数配列は一瞬で返ってしまい、loading.tsx やストリーミングが観察できない。
-// そこで DB アクセス相当の待ち時間をわざと入れている。
-// Step 6 で本物の SQLite に差し替えるときに、この 3行は削除する。
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-// ---------------------------------------------------------------------------
+import { readFile, writeFile } from 'node:fs/promises'
+import path from 'node:path'
 
 export type Post = {
   slug: string // URL に使う識別子。/blog/<slug> になる
@@ -18,48 +18,36 @@ export type Post = {
   body: string // 本文
 }
 
-const posts: Post[] = [
-  {
-    slug: 'hello-nextjs',
-    title: 'Next.js の学習をはじめた',
-    date: '2026-09-07',
-    excerpt:
-      'React だけでは足りない部分をフレームワークがどう埋めるのか、から確認していく。',
-    body: `React で画面は作れるようになったが、URL ごとの画面切り替えやデータ取得は自分で組む必要があった。
+// process.cwd() はプロジェクトのルート。@/ のようなエイリアスは
+// TypeScript の import 用なので、ファイルパスには使えない。
+const DATA_FILE = path.join(process.cwd(), 'data', 'posts.json')
 
-Next.js は React を内側に抱えたまま、そこへ「サーバー」と「ルーティング」を足してくれる。だから覚えることは増えるが、書くコードは減る。`,
-  },
-  {
-    slug: 'folder-is-url',
-    title: 'フォルダがそのまま URL になる',
-    date: '2026-09-07',
-    excerpt:
-      'App Router のルーティングは、page.tsx を置いた場所が公開される URL になる。',
-    body: `ルーティングの設定ファイルは書かない。app/ の中にフォルダを作り、そこに page.tsx を置く。それだけで URL になる。
+// --- 学習用の遅延 -----------------------------------------------------------
+// ファイル読み込みは実際には一瞬で終わるので、loading.tsx やストリーミングが
+// 観察できるよう待ち時間を足している。Step 6 で削除する。
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+// ---------------------------------------------------------------------------
 
-角括弧で囲んだ [slug] のようなフォルダを作ると動的ルートになり、1つのファイルで記事の数だけページを賄える。この記事自体がその実例。`,
-  },
-  {
-    slug: 'nested-layouts',
-    title: 'layout は入れ子になる',
-    date: '2026-09-07',
-    excerpt:
-      'ルートの layout の内側に、セグメントごとの layout が積み重なっていく。',
-    body: `app/layout.tsx がサイト全体を包み、app/blog/layout.tsx がその内側で /blog 配下だけを包む。
+async function readPosts(): Promise<Post[]> {
+  const json = await readFile(DATA_FILE, 'utf-8')
+  return JSON.parse(json) as Post[]
+}
 
-嬉しいのは、ページ遷移してもレイアウトが作り直されないこと。スクロール位置や開閉状態が保たれる。`,
-  },
-]
+async function writePosts(posts: Post[]): Promise<void> {
+  await writeFile(DATA_FILE, `${JSON.stringify(posts, null, 2)}\n`, 'utf-8')
+}
 
 /** 記事を新しい順に全件返す */
 export async function getPosts(): Promise<Post[]> {
-  await sleep(300)
-  return [...posts].sort((a, b) => b.date.localeCompare(a.date))
+  await sleep(400)
+  const posts = await readPosts()
+  return posts.sort((a, b) => b.date.localeCompare(a.date))
 }
 
 /** slug に一致する記事を返す。見つからなければ undefined */
 export async function getPost(slug: string): Promise<Post | undefined> {
-  await sleep(300)
+  await sleep(400)
+  const posts = await readPosts()
   return posts.find((post) => post.slug === slug)
 }
 
@@ -68,6 +56,20 @@ export async function getPost(slug: string): Promise<Post | undefined> {
  * 本文より重い処理の例として、あえて他より遅くしている。
  */
 export async function getRelatedPosts(slug: string): Promise<Post[]> {
-  await sleep(1000)
+  await sleep(1500)
+  const posts = await readPosts()
   return posts.filter((post) => post.slug !== slug)
+}
+
+/** slug が既に使われているか（重複チェック用。遅延なし） */
+export async function slugExists(slug: string): Promise<boolean> {
+  const posts = await readPosts()
+  return posts.some((post) => post.slug === slug)
+}
+
+/** 記事を1件追加して保存する */
+export async function addPost(post: Post): Promise<void> {
+  const posts = await readPosts()
+  posts.push(post)
+  await writePosts(posts)
 }

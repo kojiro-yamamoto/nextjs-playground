@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { getPosts } from '@/lib/posts'
 import styles from './page.module.css'
 import PostCard from './post-card'
@@ -7,15 +8,24 @@ import PostCard from './post-card'
 export default async function BlogPage() {
   const posts = await getPosts()
 
-  if (posts.length === 0) {
-    return <p className={styles.empty}>まだ記事がありません。</p>
-  }
-
   return (
-    <ul className={styles.list}>
-      {posts.map((post) => (
-        <PostCard key={post.slug} post={post} />
-      ))}
-    </ul>
+    <>
+      <div className={styles.toolbar}>
+        <p className={styles.count}>{posts.length} 件</p>
+        <Link href="/blog/new" className={styles.newLink}>
+          + 新しい記事
+        </Link>
+      </div>
+
+      {posts.length === 0 ? (
+        <p className={styles.empty}>まだ記事がありません。</p>
+      ) : (
+        <ul className={styles.list}>
+          {posts.map((post) => (
+            <PostCard key={post.slug} post={post} />
+          ))}
+        </ul>
+      )}
+    </>
   )
 }

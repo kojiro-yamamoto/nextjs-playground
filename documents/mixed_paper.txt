@@ -200,3 +200,366 @@ params = {
 です。
 =========================
 || は、JavaScriptの OR（または） です。
+=========================
+そうです。まずここでは、
+
+const initialState: CreatePostState = {}
+
+として、フォーム送信前の state は空っぽにしています。
+
+CreatePostState 自体がこうですよね。
+
+export type CreatePostState = {
+  errors?: {
+    title?: string
+    slug?: string
+    body?: string
+  }
+  values?: {
+    title: string
+    slug: string
+    body: string
+  }
+}
+
+errors も values も ? が付いているので、省略可能です。だから {} でOKです。
+
+⸻
+
+useActionState は何をするフックか
+
+かなりざっくり言うと、
+
+「フォーム送信で実行する関数の戻り値を、Reactのstateとして受け取れるようにするフック」
+
+です。
+
+今回だと、
+
+const [state, formAction, isPending] =
+  useActionState(createPost, initialState)
+
+この1行で、
+
+フォーム送信
+   ↓
+createPost が実行される
+   ↓
+createPost の return が
+   ↓
+state に入る
+   ↓
+再レンダリング
+
+という流れを作ってくれます。
+
+普通の useState に近い感覚もあります。
+
+⸻
+
+3つの戻り値
+
+const [state, formAction, isPending] =
+  useActionState(createPost, initialState)
+
+それぞれこうです。
+
+値	意味
+state	Action が前回 return した値
+formAction	<form action={...}> に渡す関数
+isPending	今まさにAction実行中か
+
+まず一番重要なのが state です。
+
+最初は、
+
+initialState = {}
+
+なので、
+
+state === {}
+
+みたいな状態から始まります。
+
+⸻
+
+フォームを送信するとどうなるか
+
+フォームがこうなっています。
+
+<form action={formAction}>
+
+ユーザーが送信すると、Reactが formAction を通して、最終的に
+
+createPost(...)
+
+を呼びます。
+
+ただしここが普通の関数呼び出しと少し違います。
+
+今回の createPost は、
+
+export async function createPost(
+  _prevState: CreatePostState,
+  formData: FormData,
+): Promise<CreatePostState>
+
+ですよね。
+
+引数が2つあります。
+
+_prevState
+formData
+
+これは useActionState を使うと、Reactが自動的に渡してくれます。
+
+つまりイメージとしてはReact内部で、
+
+createPost(
+  現在のstate,
+  フォームのFormData,
+)
+
+と呼んでいる感じです。
+
+⸻
+
+具体例で見るとかなり分かりやすい
+
+最初は、
+
+state = {}
+
+です。
+
+そしてユーザーが、
+
+タイトル: ""
+slug: "hello"
+本文: "こんにちは"
+
+で送信したとします。
+
+Reactはイメージとして、
+
+createPost(
+  {},
+  formData,
+)
+
+を呼びます。
+
+createPost の中で、
+
+if (!title) {
+  errors.title = 'タイトルを入力してください'
+}
+
+となります。
+
+そして最終的に、
+
+return {
+  errors: {
+    title: 'タイトルを入力してください'
+  },
+  values: {
+    title: '',
+    slug: 'hello',
+    body: 'こんにちは'
+  }
+}
+
+を返します。
+
+すると、この戻り値がそのまま
+
+state
+
+になります。
+
+つまり次のレンダリングでは、
+
+state = {
+  errors: {
+    title: 'タイトルを入力してください'
+  },
+  values: {
+    title: '',
+    slug: 'hello',
+    body: 'こんにちは'
+  }
+}
+
+になっています。
+
+なのでクライアント側では例えば、
+
+{state.errors?.title && (
+  <p>{state.errors.title}</p>
+)}
+
+とすれば、
+
+タイトルを入力してください
+
+を表示できます。
+
+ここが useActionState の中心です。
+
+⸻
+
+useState と何が違うの？
+
+普通なら例えば、
+
+const [errors, setErrors] = useState({})
+
+として、
+
+const handleSubmit = async () => {
+  const result = await createPost(...)
+  setErrors(result.errors)
+}
+
+みたいなことを自分で書きそうですよね。
+
+useActionState は、この
+
+Action実行
+↓
+結果を受け取る
+↓
+stateを更新
+↓
+再レンダリング
+
+をReactがまとめてやってくれます。
+
+特にNext.jsの Server Action + form と非常に相性がいいです。
+
+⸻
+
+formAction は何なのか
+
+これも重要です。
+
+const [state, formAction, isPending] =
+  useActionState(createPost, initialState)
+
+ここで直接、
+
+<form action={createPost}>
+
+にはしていません。
+
+代わりに、
+
+<form action={formAction}>
+
+です。
+
+なぜかというと、useActionState が
+
+createPost
+
+を一枚ラップしているからです。
+
+イメージすると、
+
+const formAction = async (formData) => {
+  const newState = await createPost(state, formData)
+  // React内部でstate更新
+  state = newState
+}
+
+みたいな役割です。
+
+実際の内部実装はもちろん違いますが、理解としてはこれでかなり近いです。
+
+だから、
+
+<form action={formAction}>
+
+とすることで、
+
+フォーム送信結果をstateとして受け取れるようになる
+
+わけです。
+
+⸻
+
+isPending はかなり単純
+
+const [state, formAction, isPending] =
+  useActionState(createPost, initialState)
+
+isPending は、
+
+送信していない
+false
+送信開始
+true
+Server Action実行中
+true
+処理終了
+false
+
+となります。
+
+なので例えば、
+
+<button disabled={isPending}>
+  {isPending ? '投稿中...' : '投稿する'}
+</button>
+
+とできます。
+
+ユーザーがボタンを連打するのを防げます。
+
+⸻
+
+今回のコード全体を一言で表すと
+
+今回の、
+
+const initialState: CreatePostState = {}
+const [state, formAction, isPending] =
+  useActionState(createPost, initialState)
+
+は、
+
+最初
+state = {}
+        ↓
+<form action={formAction}>
+        ↓
+フォーム送信
+        ↓
+createPost(state, formData)
+        ↓
+return { errors, values }
+        ↓
+その戻り値が新しいstateになる
+        ↓
+画面にエラーを表示
+
+という仕組みです。
+
+特に覚えておくといいのは、
+
+useActionState は「Actionの戻り値をReactのstateとして管理してくれるフック」
+
+です。
+
+そして今回 createPost の第1引数に突然
+
+_prevState
+
+が増えているのも、useActionState を使っているからです。普通に <form action={createPost}> とするだけなら、この引数の形にはなりません。
+
+useState は「自分で state を変更する」
+useActionState は「関数の実行結果で state が変更される」
+
+という違いです。
+========================
