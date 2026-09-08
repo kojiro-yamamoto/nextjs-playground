@@ -4,7 +4,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { addPost, slugExists, type Post } from './posts'
+import { addPost, type NewPost, slugExists } from './posts'
 
 // フォームに返す状態。エラーと、入力し直さなくて済むよう入力値も返す。
 export type CreatePostState = {
@@ -62,7 +62,7 @@ export async function createPost(
   }
 
   // --- 保存 ---
-  const post: Post = {
+  const post: NewPost = {
     slug,
     title,
     date: new Date().toISOString().slice(0, 10), // YYYY-MM-DD

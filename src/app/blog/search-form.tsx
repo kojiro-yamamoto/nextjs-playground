@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useRef, useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import styles from './search-form.module.css'
 
 // 検索語を useState で持たない。URL（?q=...）そのものが状態。
@@ -17,7 +17,6 @@ export default function SearchForm() {
 
   // 1文字打つたびにサーバーへ行かないよう、入力が止まってから送る
   const [text, setText] = useState(query)
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // 「検索を解除」など、入力欄の外から URL の ?q が変わったら入力も合わせる。
   // これが無いと text に検索語が残り、下の useEffect が ?q を付け直してしまう。
@@ -33,7 +32,7 @@ export default function SearchForm() {
       return
     }
 
-    timer.current = setTimeout(() => {
+    const timer = setTimeout(() => {
       const params = new URLSearchParams(searchParams)
       if (text) {
         params.set('q', text)
@@ -46,9 +45,8 @@ export default function SearchForm() {
       })
     }, 300)
 
-    return () => {
-      if (timer.current) clearTimeout(timer.current)
-    }
+    // 次の入力が来たら、まだ発火していないタイマーを取り消す（これがデバウンス）
+    return () => clearTimeout(timer)
   }, [text, query, searchParams, pathname, router])
 
   return (

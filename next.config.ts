@@ -1,7 +1,6 @@
 import type { NextConfig } from 'next'
 
-const nextConfig: NextConfig = {
-  /* config options here */
-}
+// 設定は空のまま。Turbopack / TypeScript / next/font はすべて既定で有効。
+const nextConfig: NextConfig = {}
 
 export default nextConfig

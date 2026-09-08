@@ -1,7 +1,10 @@
-// data/posts.jsonを SQLite へ流し込む。
+// data/posts.json を SQLite へ流し込む。
 //   npm run db:seed
 //
 // Node 24 は TypeScript をそのまま実行できるので、ts-node などは不要。
+// （schema.ts の import で出る MODULE_TYPELESS_PACKAGE_JSON の警告は、
+//   package.json の db:seed で --disable-warning を付けて黙らせている）
+//
 // アプリ側と違い使い捨てなので、接続はこのスクリプト内で開いて閉じる。
 
 import { drizzle } from 'drizzle-orm/node-sqlite'

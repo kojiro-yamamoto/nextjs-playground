@@ -4,15 +4,15 @@
 // Step 4: JSON ファイル
 // Step 6: SQLite + Drizzle（← いま）
 //
-// 3度中身が入れ替わったが、公開している関数の「形」は Step 2 のまま。
+// 中身は 2回 入れ替わったが、公開している関数の「形」は Step 2 のまま。
 // だから page.tsx / actions.ts 側は一度も書き換えていない。
 
 import { desc, eq, like, ne, or } from 'drizzle-orm'
 import { db } from '@/db'
-import { posts } from '@/db/schema'
+import { type NewPost, posts } from '@/db/schema'
 
 // 型はテーブル定義から生成されたものをそのまま使う
-export type { Post } from '@/db/schema'
+export type { NewPost, Post } from '@/db/schema'
 
 /**
  * 記事を新しい順に返す。
@@ -59,6 +59,6 @@ export async function slugExists(slug: string) {
 }
 
 /** 記事を1件追加して保存する */
-export async function addPost(post: typeof posts.$inferInsert) {
+export async function addPost(post: NewPost) {
   await db.insert(posts).values(post)
 }

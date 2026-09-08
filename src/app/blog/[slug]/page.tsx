@@ -48,8 +48,9 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
       <h2 className={styles.title}>{post.title}</h2>
 
       <div className={styles.body}>
-        {post.body.split('\n\n').map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
+        {post.body.split('\n\n').map((paragraph, i) => (
+          // 並び替えも増減もしない静的な配列なので、index をキーにしてよい
+          <p key={i}>{paragraph}</p>
         ))}
       </div>
 
@@ -62,9 +63,10 @@ export default async function PostPage({ params }: PageProps<'/blog/[slug]'>) {
       </div>
 
       {/*
-        RelatedPosts は 1秒かかる。Suspense で包むと、
+        RelatedPosts は自分でデータを取りに行く。Suspense で包むと、
         ここより上（本文）を待たせずに先に送り、
         準備できた時点でこの部分だけを差し込める（ストリーミング）。
+        Step 6 で速くなったので、いまはほぼ一瞬で差し替わる。
       */}
       <Suspense fallback={<RelatedPostsSkeleton />}>
         <RelatedPosts slug={post.slug} />

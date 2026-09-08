@@ -56,7 +56,7 @@ export default function AboutPage() {
         </dd>
       </dl>
 
-      <h2 className={styles.heading}>記事の保存先は 3回入れ替わった</h2>
+      <h2 className={styles.heading}>記事の保存先は 2回 入れ替わった</h2>
       <ol className={styles.list}>
         <li>Step 2: TypeScript の定数配列</li>
         <li>Step 4: JSON ファイル</li>

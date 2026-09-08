@@ -6,7 +6,7 @@ import styles from './loading.module.css'
 export default function BlogLoading() {
   return (
     <div>
-      {[0, 1, 2, 3, 4].map((i) => (
+      {Array.from({ length: 5 }, (_, i) => (
         <div key={i} className={styles.skeleton}>
           <div className={`${styles.line} ${styles.date}`} />
           <div className={`${styles.line} ${styles.title}`} />

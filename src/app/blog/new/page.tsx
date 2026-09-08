@@ -12,7 +12,7 @@ export default function NewPostPage() {
   return (
     <div>
       <p className={styles.lead}>
-        投稿した内容は <code>data/posts.json</code> に保存されます。
+        投稿した内容は SQLite（<code>data/blog.db</code>）に保存されます。
       </p>
       <PostForm />
     </div>

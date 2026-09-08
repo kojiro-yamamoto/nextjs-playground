@@ -2,8 +2,8 @@ import Link from 'next/link'
 import { getRelatedPosts } from '@/lib/posts'
 import styles from './related-posts.module.css'
 
-// 本文より重い（1秒かかる）async Server Component。
-// これを <Suspense> で包むと、本文を先に見せて、ここだけ後から差し込める。
+// 本文とは別にデータを取る async Server Component。
+// <Suspense> で包むと、本文を先に見せて、ここだけ後から差し込める。
 export default async function RelatedPosts({ slug }: { slug: string }) {
   const related = await getRelatedPosts(slug)
 

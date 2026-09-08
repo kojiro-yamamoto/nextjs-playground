@@ -129,7 +129,7 @@ Step 2 で手書きした `type Post = { slug: string; ... }` は、もう要ら
 
 ```ts
 // src/lib/posts.ts — 型はスキーマから来たものをそのまま流す
-export type { Post } from '@/db/schema'
+export type { NewPost, Post } from '@/db/schema'
 ```
 
 これで `post-card.tsx` などの `import type { Post } from '@/lib/posts'` は
