@@ -37,11 +37,26 @@ async function writePosts(posts: Post[]): Promise<void> {
   await writeFile(DATA_FILE, `${JSON.stringify(posts, null, 2)}\n`, 'utf-8')
 }
 
-/** 記事を新しい順に全件返す */
-export async function getPosts(): Promise<Post[]> {
+/**
+ * 記事を新しい順に返す。
+ * query を渡すと、タイトル・要約・本文に含まれるものだけに絞り込む。
+ */
+export async function getPosts(query?: string): Promise<Post[]> {
   await sleep(400)
   const posts = await readPosts()
-  return posts.sort((a, b) => b.date.localeCompare(a.date))
+  const sorted = posts.sort((a, b) => b.date.localeCompare(a.date))
+
+  if (!query) {
+    return sorted
+  }
+
+  // 本来は DB の全文検索に任せる部分。Step 6 で SQLite に移す
+  const needle = query.toLowerCase()
+  return sorted.filter((post) =>
+    [post.title, post.excerpt, post.body].some((text) =>
+      text.toLowerCase().includes(needle),
+    ),
+  )
 }
 
 /** slug に一致する記事を返す。見つからなければ undefined */

@@ -32,7 +32,7 @@ npm run dev   # 開発サーバー起動 → http://localhost:3000
 | 2 | 記事の一覧と詳細を表示する | Server Component の `async` データ取得、動的ルート `[slug]`、`params`、`notFound()`、`generateMetadata`、`generateStaticParams` | [02-server-components-and-dynamic-routes.md](./documents/02-server-components-and-dynamic-routes.md) | ✅ |
 | 3 | Client Component を境界として足す | `"use client"`、サーバー / クライアント境界の設計、`loading.tsx` / `error.tsx`、`<Suspense>` とストリーミング | [03-client-components.md](./documents/03-client-components.md) | ✅ |
 | 4 | 記事を投稿する | Server Actions、`<form action>`、`useActionState`、`revalidatePath`、JSON ファイルへの永続化 | [04-server-actions.md](./documents/04-server-actions.md) | ✅ |
-| 5 | 検索とレンダリング・キャッシュ | `searchParams`、URL を状態として使う、静的 / 動的レンダリング、再検証、`next build` の読み方 | – | ⬜ |
+| 5 | 検索とレンダリング・キャッシュ | `searchParams`、URL を状態として使う、静的 / 動的レンダリング、再検証、`next build` の読み方 | [05-search-and-rendering.md](./documents/05-search-and-rendering.md) | ✅ |
 | 6 | SQLite に保存してデプロイする | Prisma、スキーマ設計、マイグレーション、環境変数、デプロイ | – | ⬜ |
 
 各 Step の完了時点は `step0`〜`step6` ブランチとしてリモートに残してあります。
@@ -43,7 +43,7 @@ git switch step2   # Step 2 完了時点の状態
 npm run dev
 ```
 
-`main` は常に最新（Step4 まで完了した状態）です。
+`main` は常に最新（Step5 まで完了した状態）です。
 
 ### この先の発展トピック（本編では扱わない）
 

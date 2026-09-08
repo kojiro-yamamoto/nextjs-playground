@@ -563,3 +563,101 @@ useActionState は「関数の実行結果で state が変更される」
 
 という違いです。
 ========================
+const [isPending, startTransition] = useTransition()
+
+まず形としては、useState と似ています。
+
+const [状態, 状態を変更する関数] = useState()
+
+に対して、
+
+const [isPending, startTransition] = useTransition()
+
+は、
+
+useTransition()
+      ↓
+┌─────────────────────────────┐
+│ isPending                   │
+│ → 処理中かどうか             │
+│                             │
+│ startTransition             │
+│ → 処理をTransitionとして実行 │
+└─────────────────────────────┘
+
+という2つを返します。
+
+たとえば検索でこう使います。
+
+const [isPending, startTransition] = useTransition()
+function search() {
+  startTransition(() => {
+    router.push('/blog?q=react')
+  })
+}
+
+startTransition() の中に、
+
+「この画面更新は緊急じゃないですよ」
+
+という処理を入れます。
+
+そして、その画面更新をReactが処理している間、
+
+isPending === true
+
+になります。
+
+なので、
+
+{isPending && <p>検索中...</p>}
+
+みたいなことができます。
+
+なんで普通に router.push() しないの？
+
+ここが useTransition の本質です。
+
+検索結果の更新などは、
+
+入力操作などを邪魔してまで最優先で処理する必要はない
+
+ですよね。
+
+そこで、
+
+startTransition(() => {
+  router.push(...)
+})
+
+とすることでReactに、
+
+「この更新は優先度低めの画面更新として扱ってね」
+
+と伝えられます。
+
+今回の検索フォームなら、おそらくこんな流れです。
+
+検索ボックスに「react」と入力
+        ↓
+startTransition(() => {
+  router.push('/blog?q=react')
+})
+        ↓
+isPending = true
+        ↓
+BlogPageが新しいsearchParamsで更新される
+        ↓
+getPosts('react')
+        ↓
+検索結果が表示される
+        ↓
+isPending = false
+
+なので今は、
+
+useTransition() = 「ちょっと時間のかかる画面更新を行いつつ、その処理中かどうかも知るためのReact Hook」
+
+くらいで覚えておけば十分です。
+
+ちなみに isPending は「何らかの通信が全部終わるまで常にtrue」という汎用ローディング状態ではなく、そのTransitionによるReactの更新がPendingかどうかなのがポイントです。
