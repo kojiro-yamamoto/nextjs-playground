@@ -523,7 +523,7 @@ React の中心が「状態」だったのに対し、Next.js の中心は **「
 | 3 | Client Component を境界として足す | `"use client"`、境界の設計、`loading.tsx` / `error.tsx`、ストリーミング |
 | 4 | 記事を投稿する | Server Actions、`<form action>`、`revalidatePath`、JSON ファイルへの永続化 |
 | 5 | 検索とレンダリング・キャッシュ | `searchParams`、静的 / 動的レンダリング、再検証、`next build` の読み方 |
-| 6 | SQLite に保存してデプロイする | Prisma、スキーマ、マイグレーション、環境変数、デプロイ |
+| 6 | SQLite に保存する | Drizzle ORM、スキーマ、マイグレーション、シード |
 
 ### この先の発展トピック（本編では扱わない）
 
@@ -536,6 +536,7 @@ React の中心が「状態」だったのに対し、Next.js の中心は **「
 | 認証・認可 | ログイン状態の管理。Server Action / Server Component 側でのチェック |
 | 並列ルート / インターセプトルート | モーダルを URL で表現するなどの高度なルーティング |
 | Cache Components（`use cache`） | キャッシュを細かく制御する新しい仕組み |
+| デプロイ | Vercel などへの公開、環境変数の扱い |
 
 ---
 

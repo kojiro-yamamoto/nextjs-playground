@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# database (drizzle のマイグレーションと data/posts.json から再生成できる)
+/data/*.db
+/data/*.db-journal

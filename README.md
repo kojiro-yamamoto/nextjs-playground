@@ -15,12 +15,27 @@ Next.js の学習用リポジトリ。**ブログアプリ**を少しずつ作�
 - React 19 + TypeScript
 - スタイルは素の CSS（Tailwind は使いません。Next.js の学習に集中するため）
 - データは Step が進むにつれて **定数 → JSON ファイル → SQLite** と育てていきます
+- Step 6 以降: SQLite + [Drizzle ORM](https://orm.drizzle.team/)。
+  ドライバは Node.js 組み込みの [`node:sqlite`](https://nodejs.org/api/sqlite.html)（外部パッケージ不要 / Node 22 以降）
 
 ## 起動方法
 
 ```bash
-npm install   # 初回のみ
-npm run dev   # 開発サーバー起動 → http://localhost:3000
+npm install       # 初回のみ
+npm run db:setup  # 初回のみ: DB を作り、data/posts.json を投入する
+npm run dev       # 開発サーバー起動 → http://localhost:3000
+```
+
+`data/blog.db` は Git 管理外です。`npm run db:setup` でいつでも作り直せます。
+
+### データベース関連のコマンド
+
+```bash
+npm run db:generate   # src/db/schema.ts の変更から SQL を生成する
+npm run db:migrate    # 生成された SQL を DB に適用する
+npm run db:seed       # data/posts.json の内容を DB に入れ直す
+npm run db:studio     # ブラウザで DB の中身を見る
+npm run db:setup      # migrate + seed（初回セットアップ用）
 ```
 
 ## 学習ロードマップ
@@ -33,7 +48,7 @@ npm run dev   # 開発サーバー起動 → http://localhost:3000
 | 3 | Client Component を境界として足す | `"use client"`、サーバー / クライアント境界の設計、`loading.tsx` / `error.tsx`、`<Suspense>` とストリーミング | [03-client-components.md](./documents/03-client-components.md) | ✅ |
 | 4 | 記事を投稿する | Server Actions、`<form action>`、`useActionState`、`revalidatePath`、JSON ファイルへの永続化 | [04-server-actions.md](./documents/04-server-actions.md) | ✅ |
 | 5 | 検索とレンダリング・キャッシュ | `searchParams`、URL を状態として使う、静的 / 動的レンダリング、再検証、`next build` の読み方 | [05-search-and-rendering.md](./documents/05-search-and-rendering.md) | ✅ |
-| 6 | SQLite に保存してデプロイする | Prisma、スキーマ設計、マイグレーション、環境変数、デプロイ | – | ⬜ |
+| 6 | SQLite に保存する | Drizzle ORM、スキーマ定義、マイグレーション、シード、`node:sqlite` | [06-drizzle-sqlite.md](./documents/06-drizzle-sqlite.md) | ✅ |
 
 各 Step の完了時点は `step0`〜`step6` ブランチとしてリモートに残してあります。
 その Step の画面を動かしたいときは、ブランチを切り替えて `npm run dev` すれば見られます。
@@ -43,12 +58,13 @@ git switch step2   # Step 2 完了時点の状態
 npm run dev
 ```
 
-`main` は常に最新（Step5 まで完了した状態）です。
+`main` は常に最新（Step6 まで完了した状態）です。
 
 ### この先の発展トピック（本編では扱わない）
 
 Route Handlers（`route.ts`）、Proxy（`proxy.ts`）、認証・認可、並列 / インターセプトルート、
-Cache Components（`use cache`）。一通り終えたあと、必要になったタイミングで公式ドキュメントを引きます。
+Cache Components（`use cache`）、デプロイと環境変数。
+一通り終えたあと、必要になったタイミングで公式ドキュメントを引きます。
 
 ## 進め方
 
